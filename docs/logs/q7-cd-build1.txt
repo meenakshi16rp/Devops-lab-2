@@ -1,0 +1,20 @@
+[Pipeline] echo
+Verifying the service responds...
+[Pipeline] sh
++ minikube ip
++ curl -sf http://* Profile "minikube" not found. Run "minikube profile list" to view all profiles. To start a cluster, run: "minikube start":30080/health
+[Pipeline] }
+[Pipeline] // stage
+[Pipeline] stage
+[Pipeline] { (Declarative: Post Actions)
+[Pipeline] echo
+CD FAILED - check the stage logs.
+[Pipeline] }
+[Pipeline] // stage
+[Pipeline] }
+[Pipeline] // withEnv
+[Pipeline] }
+[Pipeline] // node
+[Pipeline] End of Pipeline
+ERROR: script returned exit code 3
+Finished: FAILURE

@@ -1,0 +1,100 @@
+Started by user meenakshi
+Obtained Jenkinsfile-CD from git https://github.com/meenakshi16rp/Devops-lab-2.git
+[Pipeline] Start of Pipeline
+[Pipeline] node
+Running on Jenkins in /var/lib/jenkins/workspace/ensp461-lab2-cd
+[Pipeline] {
+[Pipeline] stage
+[Pipeline] { (Declarative: Checkout SCM)
+[Pipeline] checkout
+Selected Git installation does not exist. Using Default
+The recommended git tool is: NONE
+using credential github-creds
+Cloning the remote Git repository
+Cloning repository https://github.com/meenakshi16rp/Devops-lab-2.git
+ > git init /var/lib/jenkins/workspace/ensp461-lab2-cd # timeout=10
+Fetching upstream changes from https://github.com/meenakshi16rp/Devops-lab-2.git
+ > git --version # timeout=10
+ > git --version # 'git version 2.43.0'
+using GIT_ASKPASS to set credentials GitHub PAT for Meenakshi (ENSP461 Lab 1)
+ > git fetch --tags --force --progress -- https://github.com/meenakshi16rp/Devops-lab-2.git +refs/heads/*:refs/remotes/origin/* # timeout=10
+ > git config remote.origin.url https://github.com/meenakshi16rp/Devops-lab-2.git # timeout=10
+ > git config --add remote.origin.fetch +refs/heads/*:refs/remotes/origin/* # timeout=10
+Avoid second fetch
+ > git rev-parse refs/remotes/origin/main^{commit} # timeout=10
+Checking out Revision b50823d88a9157735d1743ca15216f973a0a9184 (refs/remotes/origin/main)
+ > git config core.sparsecheckout # timeout=10
+ > git checkout -f b50823d88a9157735d1743ca15216f973a0a9184 # timeout=10
+Commit message: "Add k8s manifests, Dockerfile, compose, CD pipeline and experiment logs"
+First time build. Skipping changelog.
+[Pipeline] }
+[Pipeline] // stage
+[Pipeline] withEnv
+[Pipeline] {
+[Pipeline] stage
+[Pipeline] { (Checkout)
+[Pipeline] echo
+Pulling manifests from GitHub...
+[Pipeline] checkout
+Selected Git installation does not exist. Using Default
+The recommended git tool is: NONE
+using credential github-creds
+ > git rev-parse --resolve-git-dir /var/lib/jenkins/workspace/ensp461-lab2-cd/.git # timeout=10
+Fetching changes from the remote Git repository
+ > git config remote.origin.url https://github.com/meenakshi16rp/Devops-lab-2.git # timeout=10
+Fetching upstream changes from https://github.com/meenakshi16rp/Devops-lab-2.git
+ > git --version # timeout=10
+ > git --version # 'git version 2.43.0'
+using GIT_ASKPASS to set credentials GitHub PAT for Meenakshi (ENSP461 Lab 1)
+ > git fetch --tags --force --progress -- https://github.com/meenakshi16rp/Devops-lab-2.git +refs/heads/*:refs/remotes/origin/* # timeout=10
+ > git rev-parse refs/remotes/origin/main^{commit} # timeout=10
+Checking out Revision b50823d88a9157735d1743ca15216f973a0a9184 (refs/remotes/origin/main)
+ > git config core.sparsecheckout # timeout=10
+ > git checkout -f b50823d88a9157735d1743ca15216f973a0a9184 # timeout=10
+Commit message: "Add k8s manifests, Dockerfile, compose, CD pipeline and experiment logs"
+[Pipeline] }
+[Pipeline] // stage
+[Pipeline] stage
+[Pipeline] { (Apply manifests)
+[Pipeline] echo
+Applying Kubernetes manifests to the Minikube cluster...
+[Pipeline] sh
++ kubectl apply -f k8s/configmap.yaml
+configmap/lab2-config unchanged
+[Pipeline] sh
++ kubectl apply -f k8s/service.yaml
+service/lab2-svc unchanged
+[Pipeline] sh
++ kubectl apply -f k8s/deployment.yaml
+deployment.apps/lab2-app unchanged
+[Pipeline] }
+[Pipeline] // stage
+[Pipeline] stage
+[Pipeline] { (Verify rollout)
+[Pipeline] sh
++ kubectl rollout status deployment/lab2-app --timeout=180s
+deployment "lab2-app" successfully rolled out
+[Pipeline] }
+[Pipeline] // stage
+[Pipeline] stage
+[Pipeline] { (Smoke test)
+[Pipeline] echo
+Verifying the service responds...
+[Pipeline] sh
++ minikube ip
++ curl -sf http://* Profile "minikube" not found. Run "minikube profile list" to view all profiles. To start a cluster, run: "minikube start":30080/health
+[Pipeline] }
+[Pipeline] // stage
+[Pipeline] stage
+[Pipeline] { (Declarative: Post Actions)
+[Pipeline] echo
+CD FAILED - check the stage logs.
+[Pipeline] }
+[Pipeline] // stage
+[Pipeline] }
+[Pipeline] // withEnv
+[Pipeline] }
+[Pipeline] // node
+[Pipeline] End of Pipeline
+ERROR: script returned exit code 3
+Finished: FAILURE
