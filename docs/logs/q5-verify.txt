@@ -1,0 +1,32 @@
+meenakshi@ubuntu:~$ kubectl get pods -o wide
+NAME                        READY   STATUS    RESTARTS   AGE   IP           NODE       NOMINATED NODE   READINESS GATES
+lab2-app-59d84c84c4-qp9pp   1/1     Running   0          54s   10.244.0.2   minikube   <none>           <none>
+lab2-app-59d84c84c4-szv2z   1/1     Running   0          54s   10.244.0.4   minikube   <none>           <none>
+
+meenakshi@ubuntu:~$ kubectl get deployment,svc
+NAME                       READY   UP-TO-DATE   AVAILABLE   AGE
+deployment.apps/lab2-app   2/2     2            2           55s
+
+NAME                 TYPE        CLUSTER-IP       EXTERNAL-IP   PORT(S)          AGE
+service/kubernetes   ClusterIP   10.96.0.1        <none>        443/TCP          75s
+service/lab2-svc     NodePort    10.103.154.210   <none>        5000:30080/TCP   55s
+
+meenakshi@ubuntu:~$ kubectl describe pod -l app=lab2-app | grep -E "Image:|State:|Started:" | head -6
+    Image:          ghcr.io/meenakshi16rp/devops-lab2-app:2.0.0
+    State:          Running
+      Started:      Wed, 04 Nov 2026 20:04:45 +0000
+    Image:          ghcr.io/meenakshi16rp/devops-lab2-app:2.0.0
+    State:          Running
+      Started:      Wed, 04 Nov 2026 20:04:43 +0000
+
+meenakshi@ubuntu:~$ curl -s http://192.168.49.2:30080/   (via NodePort 30080)
+{"hostname":"lab2-app-59d84c84c4-szv2z","message":"Hello from Meenakshi Kubernetes Lab","version":"2.0.0","visits":0}
+
+
+meenakshi@ubuntu:~$ curl -s http://192.168.49.2:30080/   (repeat - different pod)
+{"hostname":"lab2-app-59d84c84c4-szv2z","message":"Hello from Meenakshi Kubernetes Lab","version":"2.0.0","visits":0}
+
+
+meenakshi@ubuntu:~$ minikube service lab2-svc --url
+http://127.0.0.1:44631
+! Because you are using a Docker driver on linux, the terminal needs to be open to run it.

@@ -1,0 +1,46 @@
+meenakshi@ubuntu:~$ kubectl get pods   # before the update
+NAME                        READY   STATUS    RESTARTS   AGE
+lab2-app-59d84c84c4-qp9pp   1/1     Running   0          3m55s
+lab2-app-59d84c84c4-szv2z   1/1     Running   0          3m55s
+
+meenakshi@ubuntu:~$ kubectl set image deployment/lab2-app lab2-app=ghcr.io/meenakshi16rp/devops-lab2-app:2.1.0
+deployment.apps/lab2-app image updated
+
+meenakshi@ubuntu:~$ kubectl rollout status deployment/lab2-app
+Waiting for deployment "lab2-app" rollout to finish: 1 out of 2 new replicas have been updated...
+Waiting for deployment "lab2-app" rollout to finish: 1 out of 2 new replicas have been updated...
+Waiting for deployment "lab2-app" rollout to finish: 1 out of 2 new replicas have been updated...
+Waiting for deployment "lab2-app" rollout to finish: 1 old replicas are pending termination...
+Waiting for deployment "lab2-app" rollout to finish: 1 old replicas are pending termination...
+deployment "lab2-app" successfully rolled out
+
+meenakshi@ubuntu:~$ kubectl get pods -o wide   # after rolling update (new ReplicaSet)
+NAME                        READY   STATUS        RESTARTS   AGE    IP           NODE       NOMINATED NODE   READINESS GATES
+lab2-app-54f4979f85-8625x   1/1     Running       0          6s     10.244.0.5   minikube   <none>           <none>
+lab2-app-54f4979f85-rzvjn   1/1     Running       0          1s     10.244.0.6   minikube   <none>           <none>
+lab2-app-59d84c84c4-qp9pp   1/1     Terminating   0          4m1s   10.244.0.2   minikube   <none>           <none>
+lab2-app-59d84c84c4-szv2z   1/1     Terminating   0          4m1s   10.244.0.4   minikube   <none>           <none>
+
+meenakshi@ubuntu:~$ kubectl rollout history deployment/lab2-app
+deployment.apps/lab2-app 
+REVISION  CHANGE-CAUSE
+1         <none>
+2         <none>
+
+
+meenakshi@ubuntu:~$ kubectl rollout undo deployment/lab2-app
+Warning: resource deployments/lab2-app was previously managed with 'kubectl apply'. Rolling back will not update the kubectl.kubernetes.io/last-applied-configuration annotation, which may cause unexpected behavior on future 'kubectl apply' operations. Consider using 'kubectl apply' with your previous configuration file instead.
+deployment.apps/lab2-app rolled back
+Waiting for deployment "lab2-app" rollout to finish: 1 out of 2 new replicas have been updated...
+Waiting for deployment "lab2-app" rollout to finish: 1 out of 2 new replicas have been updated...
+Waiting for deployment "lab2-app" rollout to finish: 1 out of 2 new replicas have been updated...
+Waiting for deployment "lab2-app" rollout to finish: 1 old replicas are pending termination...
+Waiting for deployment "lab2-app" rollout to finish: 1 old replicas are pending termination...
+deployment "lab2-app" successfully rolled out
+
+meenakshi@ubuntu:~$ kubectl rollout history deployment/lab2-app   # revision after rollback
+deployment.apps/lab2-app 
+REVISION  CHANGE-CAUSE
+2         <none>
+3         <none>
+

@@ -1,0 +1,26 @@
+meenakshi@ubuntu:~$ docker compose up -d
+ Container ensp461-lab2-redis-1 Started 
+ Container ensp461-lab2-web-1 Starting 
+ Container ensp461-lab2-web-1 Started 
+
+meenakshi@ubuntu:~$ docker compose ps
+NAME                   IMAGE                                         STATUS                  PORTS
+ensp461-lab2-redis-1   redis:7-alpine                                Up 1 second             6379/tcp
+ensp461-lab2-web-1     ghcr.io/meenakshi16rp/devops-lab2-app:2.0.0   Up Less than a second   0.0.0.0:5002->5000/tcp, [::]:5002->5000/tcp
+
+meenakshi@ubuntu:~$ curl -s http://localhost:5002/  (visit 1)
+{"hostname":"6eb0fb6cc631","message":"Hello from Meenakshi Container Lab","version":"2.0.0","visits":1}
+
+
+meenakshi@ubuntu:~$ curl -s http://localhost:5002/  (visit 2 - counter served via redis)
+{"hostname":"6eb0fb6cc631","message":"Hello from Meenakshi Container Lab","version":"2.0.0","visits":2}
+
+
+meenakshi@ubuntu:~$ docker compose logs web | tail -2
+web-1  | 172.21.0.1 - - [04/Nov/2026 19:46:56] "GET / HTTP/1.1" 200 -
+web-1  | 172.21.0.1 - - [04/Nov/2026 19:46:56] "GET / HTTP/1.1" 200 -
+
+meenakshi@ubuntu:~$ docker compose down
+ Container ensp461-lab2-redis-1 Removed 
+ Network ensp461-lab2_default Removing 
+ Network ensp461-lab2_default Removed 

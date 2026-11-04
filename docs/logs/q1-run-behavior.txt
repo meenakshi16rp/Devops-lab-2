@@ -1,0 +1,26 @@
+meenakshi@ubuntu:~$ docker run -d --name lab2-web -p 5001:5000 ghcr.io/meenakshi16rp/devops-lab2-app:2.0.0
+4239330c733eeb5a8eb5e4f1d6b18886274f12ac5073aed82728c77e6b338008
+
+meenakshi@ubuntu:~$ docker ps --filter name=lab2-web
+CONTAINER ID   IMAGE                                         STATUS        PORTS                                         NAMES
+4239330c733e   ghcr.io/meenakshi16rp/devops-lab2-app:2.0.0   Up 1 second   0.0.0.0:5001->5000/tcp, [::]:5001->5000/tcp   lab2-web
+
+meenakshi@ubuntu:~$ curl -s http://localhost:5001/
+{"hostname":"4239330c733e","message":"Hello from Meenakshi Container Lab","version":"2.0.0","visits":0}
+
+
+meenakshi@ubuntu:~$ curl -s http://localhost:5001/health
+{"status":"UP"}
+
+
+meenakshi@ubuntu:~$ curl -s http://localhost:5001/info
+{"app":"ensp461-lab2-sample-app","author":"Meenakshi","container":"4239330c733e","version":"2.0.0"}
+
+
+meenakshi@ubuntu:~$ docker inspect lab2-web --format ...
+Image: ghcr.io/meenakshi16rp/devops-lab2-app:2.0.0 | State: running | Bridge IP: 172.17.0.2
+
+meenakshi@ubuntu:~$ docker logs lab2-web
+ * Serving Flask app 'app'
+ * Debug mode: off
+[31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m

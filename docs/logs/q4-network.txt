@@ -1,0 +1,29 @@
+meenakshi@ubuntu:~$ docker network create lab2net
+1913c2f5fb343b926e32785541a1f8d978028c3bf62ccbf1eeca0809febf75df
+
+meenakshi@ubuntu:~$ docker run -d --name net-web --network lab2net ghcr.io/meenakshi16rp/devops-lab2-app:2.0.0
+e467f234a2088468a79f86f402489a97d562c00b98c00933b70d38d0f2364f0c
+
+meenakshi@ubuntu:~$ docker run -d --name net-client --network lab2net busybox sleep 3600
+169548f676fffbaddf65f7839d10436d4d8b614f2309e20fb67acb73215ce569
+
+meenakshi@ubuntu:~$ docker inspect net-web --format {{.NetworkSettings.Networks.lab2net.IPAddress}}
+172.18.0.2
+
+meenakshi@ubuntu:~$ docker exec net-client ping -c 2 net-web   # communication via container NAME
+--- net-web ping statistics ---
+2 packets transmitted, 2 packets received, 0% packet loss
+round-trip min/avg/max = 0.249/0.713/1.178 ms
+
+meenakshi@ubuntu:~$ docker exec net-client wget -qO- http://net-web:5000/health   # HTTP via container NAME
+{"status":"UP"}
+
+
+meenakshi@ubuntu:~$ docker exec net-client wget -qO- http://172.18.0.2:5000/health   # HTTP via container IP
+{"status":"UP"}
+
+
+meenakshi@ubuntu:~$ docker exec net-client ping -c 2 172.18.0.2   # ping via container IP
+--- 172.18.0.2 ping statistics ---
+2 packets transmitted, 2 packets received, 0% packet loss
+round-trip min/avg/max = 0.245/0.368/0.492 ms

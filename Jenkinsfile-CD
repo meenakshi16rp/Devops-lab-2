@@ -1,0 +1,35 @@
+// ENSP461 Lab 2 - Continuous deployment to Kubernetes (Minikube)
+pipeline {
+    agent any
+    stages {
+        stage("Checkout") {
+            steps {
+                echo "Pulling manifests from GitHub..."
+                checkout scm
+            }
+        }
+        stage("Apply manifests") {
+            steps {
+                echo "Applying Kubernetes manifests to the Minikube cluster..."
+                sh "kubectl apply -f k8s/configmap.yaml"
+                sh "kubectl apply -f k8s/service.yaml"
+                sh "kubectl apply -f k8s/deployment.yaml"
+            }
+        }
+        stage("Verify rollout") {
+            steps {
+                sh "kubectl rollout status deployment/lab2-app --timeout=180s"
+            }
+        }
+        stage("Smoke test") {
+            steps {
+                echo "Verifying the service responds..."
+                sh "curl -sf http://\$(minikube ip):30080/health"
+            }
+        }
+    }
+    post {
+        success { echo "CD SUCCESS: cluster state matches the repository manifests." }
+        failure { echo "CD FAILED - check the stage logs." }
+    }
+}

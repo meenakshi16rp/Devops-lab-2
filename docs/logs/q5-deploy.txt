@@ -1,0 +1,21 @@
+meenakshi@ubuntu:~$ minikube status
+minikube
+type: Control Plane
+host: Running
+kubelet: Running
+apiserver: Running
+kubeconfig: Configured
+
+
+meenakshi@ubuntu:~$ kubectl create secret docker-registry ghcr-secret --docker-server=ghcr.io --docker-username=meenakshi16rp --docker-password=$GH_PAT
+secret/ghcr-secret created
+
+meenakshi@ubuntu:~$ kubectl apply -f k8s/configmap.yaml -f k8s/deployment.yaml -f k8s/service.yaml
+configmap/lab2-config created
+deployment.apps/lab2-app created
+service/lab2-svc created
+
+meenakshi@ubuntu:~$ kubectl rollout status deployment/lab2-app
+Waiting for deployment "lab2-app" rollout to finish: 0 of 2 updated replicas are available...
+Waiting for deployment "lab2-app" rollout to finish: 1 of 2 updated replicas are available...
+deployment "lab2-app" successfully rolled out

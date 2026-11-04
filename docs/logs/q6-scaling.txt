@@ -1,0 +1,42 @@
+meenakshi@ubuntu:~$ curl -s http://192.168.49.2:30080/   # after rollback -> version 2.0.0
+{"hostname":"lab2-app-59d84c84c4-kfmms","message":"Hello from Meenakshi Kubernetes Lab","version":"2.0.0","visits":0}
+
+
+meenakshi@ubuntu:~$ kubectl scale deployment/lab2-app --replicas=4
+deployment.apps/lab2-app scaled
+Waiting for deployment "lab2-app" rollout to finish: 2 of 4 updated replicas are available...
+Waiting for deployment "lab2-app" rollout to finish: 3 of 4 updated replicas are available...
+deployment "lab2-app" successfully rolled out
+
+meenakshi@ubuntu:~$ kubectl get pods -o wide   # scaled to 4 replicas
+NAME                        READY   STATUS        RESTARTS   AGE     IP            NODE       NOMINATED NODE   READINESS GATES
+lab2-app-54f4979f85-8625x   1/1     Terminating   0          27s     10.244.0.5    minikube   <none>           <none>
+lab2-app-54f4979f85-rzvjn   1/1     Terminating   0          22s     10.244.0.6    minikube   <none>           <none>
+lab2-app-59d84c84c4-kfmms   1/1     Running       0          19s     10.244.0.8    minikube   <none>           <none>
+lab2-app-59d84c84c4-mtjkx   1/1     Running       0          2s      10.244.0.10   minikube   <none>           <none>
+lab2-app-59d84c84c4-qp9pp   1/1     Terminating   0          4m22s   10.244.0.2    minikube   <none>           <none>
+lab2-app-59d84c84c4-r4drc   1/1     Running       0          20s     10.244.0.7    minikube   <none>           <none>
+lab2-app-59d84c84c4-szv2z   1/1     Terminating   0          4m22s   10.244.0.4    minikube   <none>           <none>
+lab2-app-59d84c84c4-w6gpl   1/1     Running       0          2s      10.244.0.9    minikube   <none>           <none>
+
+meenakshi@ubuntu:~$ for i in 1 2 3 4; do curl -s http://192.168.49.2:30080/ | grep -o hostname.*; done   # load across pods
+{"hostname":"lab2-app-59d84c84c4-kfmms","message":"Hello from Meenakshi Kubernetes Lab","version":"2.0.0","visits":0}
+
+{"hostname":"lab2-app-59d84c84c4-kfmms","message":"Hello from Meenakshi Kubernetes Lab","version":"2.0.0","visits":0}
+
+{"hostname":"lab2-app-59d84c84c4-kfmms","message":"Hello from Meenakshi Kubernetes Lab","version":"2.0.0","visits":0}
+
+{"hostname":"lab2-app-59d84c84c4-kfmms","message":"Hello from Meenakshi Kubernetes Lab","version":"2.0.0","visits":0}
+
+
+meenakshi@ubuntu:~$ kubectl scale deployment/lab2-app --replicas=2
+deployment.apps/lab2-app scaled
+NAME                        READY   STATUS        RESTARTS   AGE
+lab2-app-54f4979f85-8625x   1/1     Terminating   0          32s
+lab2-app-54f4979f85-rzvjn   1/1     Terminating   0          27s
+lab2-app-59d84c84c4-kfmms   1/1     Running       0          24s
+lab2-app-59d84c84c4-mtjkx   1/1     Terminating   0          7s
+lab2-app-59d84c84c4-qp9pp   1/1     Terminating   0          4m27s
+lab2-app-59d84c84c4-r4drc   1/1     Running       0          25s
+lab2-app-59d84c84c4-szv2z   1/1     Terminating   0          4m27s
+lab2-app-59d84c84c4-w6gpl   1/1     Terminating   0          7s

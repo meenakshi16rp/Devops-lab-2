@@ -1,0 +1,55 @@
+meenakshi@ubuntu:~$ docker ps -a --format "table ..."   # list containers
+NAMES                IMAGE                                                  STATUS
+lab2-web             ghcr.io/meenakshi16rp/devops-lab2-app:2.0.0            Up 51 seconds
+lab3-flag            devops-lab3-app:3.0.0                                  Exited (255) 3 hours ago
+lab3-logstash        docker.elastic.co/logstash/logstash:8.14.1             Exited (255) 3 hours ago
+lab3-kibana          docker.elastic.co/kibana/kibana:8.14.1                 Exited (255) 3 hours ago
+lab3-elasticsearch   docker.elastic.co/elasticsearch/elasticsearch:8.14.1   Exited (255) 3 hours ago
+lab3-prometheus      prom/prometheus:v2.53.0                                Exited (255) 3 hours ago
+lab3-app             devops-lab3-app:3.0.0                                  Exited (255) 3 hours ago
+lab3-grafana         grafana/grafana:11.1.0                                 Exited (255) 3 hours ago
+lab3-web-3           785835ea65db                                           Exited (255) 3 hours ago
+lab3-web-4           785835ea65db                                           Exited (255) 3 hours ago
+lab3-web-2           785835ea65db                                           Exited (255) 3 hours ago
+lab3-web-1           785835ea65db                                           Exited (255) 3 hours ago
+lab3node             ubuntu:24.04                                           Exited (255) 3 hours ago
+minikube             gcr.io/k8s-minikube/kicbase:v0.0.51                    Exited (255) 5 hours ago
+
+meenakshi@ubuntu:~$ docker stop lab2-web
+lab2-web
+
+meenakshi@ubuntu:~$ docker ps --filter name=lab2-web
+NAMES      STATUS
+lab2-web   Exited (137) 1 second ago
+
+meenakshi@ubuntu:~$ docker start lab2-web
+lab2-web
+
+meenakshi@ubuntu:~$ docker ps --filter name=lab2-web
+NAMES      STATUS
+lab2-web   Up 1 second
+
+meenakshi@ubuntu:~$ docker images ghcr.io/meenakshi16rp/devops-lab2-app
+REPOSITORY                              TAG       SIZE
+ghcr.io/meenakshi16rp/devops-lab2-app   2.0.0     207MB
+
+meenakshi@ubuntu:~$ docker tag ghcr.io/meenakshi16rp/devops-lab2-app:2.0.0 ghcr.io/meenakshi16rp/devops-lab2-app:latest
+ghcr.io/meenakshi16rp/devops-lab2-app:2.0.0
+ghcr.io/meenakshi16rp/devops-lab2-app:latest
+
+meenakshi@ubuntu:~$ echo $GH_PAT | docker login ghcr.io -u meenakshi16rp --password-stdin
+
+WARNING! Your credentials are stored unencrypted in '/home/meenakshi/.docker/config.json'.
+Configure a credential helper to remove this warning. See
+https://docs.docker.com/go/credential-store/
+
+Login Succeeded
+
+meenakshi@ubuntu:~$ docker push ghcr.io/meenakshi16rp/devops-lab2-app:2.0.0
+f574edac59d9: Pushed
+6fc242d221a6: Pushed
+2.0.0: digest: sha256:79a66362d5157d16e965e7f636577008456d89bf4b8e1931477b8143ac9ebae8 size: 856
+
+meenakshi@ubuntu:~$ docker push ghcr.io/meenakshi16rp/devops-lab2-app:latest
+e25294ca6fe2: Layer already exists
+latest: digest: sha256:79a66362d5157d16e965e7f636577008456d89bf4b8e1931477b8143ac9ebae8 size: 856

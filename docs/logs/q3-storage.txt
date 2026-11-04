@@ -1,0 +1,50 @@
+=== 1. Container-layer data is lost when the container is deleted ===
+
+meenakshi@ubuntu:~$ docker run -d --name layer-demo ghcr.io/meenakshi16rp/devops-lab2-app:2.0.0
+697b1688099f3d2e8b93734b976cadf809e07f8fac0f99506c63f166c9e52fbe
+
+meenakshi@ubuntu:~$ docker exec layer-demo sh -c "echo important-data > /app/data.txt && cat /app/data.txt"
+important-data
+
+meenakshi@ubuntu:~$ docker rm -f layer-demo
+layer-demo
+
+meenakshi@ubuntu:~$ docker run -d --name layer-demo-2 ghcr.io/meenakshi16rp/devops-lab2-app:2.0.0 && docker exec layer-demo-2 cat /app/data.txt
+cat: /app/data.txt: No such file or directory
+
+=== 2. Persistent storage with a Docker named volume ===
+
+meenakshi@ubuntu:~$ docker volume create lab2-data
+lab2-data
+
+meenakshi@ubuntu:~$ docker run -d --name vol-demo -v lab2-data:/data busybox sh -c \x27while true; do sleep 3600; done\x27
+Unable to find image 'busybox:latest' locally
+latest: Pulling from library/busybox
+37bb94b0940b: Pulling fs layer
+37bb94b0940b: Download complete
+46500c34ad0c: Download complete
+37bb94b0940b: Pull complete
+Digest: sha256:a46257e06c82ad85242d0d38077d0a52d9896389ca60a1a59d3463db586e5fa4
+Status: Downloaded newer image for busybox:latest
+d5b57a9d3968ee0aa5c427002a31286da99f33bc3222ed60aee1a4c03a68c244
+
+meenakshi@ubuntu:~$ docker exec vol-demo sh -c "echo persistent-data > /data/note.txt && cat /data/note.txt"
+persistent-data
+
+meenakshi@ubuntu:~$ docker rm -f vol-demo
+vol-demo
+
+meenakshi@ubuntu:~$ docker run --rm -v lab2-data:/data busybox cat /data/note.txt
+persistent-data
+
+=== 3. Permanent storage with a bind mount ===
+
+meenakshi@ubuntu:~$ mkdir -p ~/bindmount-demo && echo host-file-content > ~/bindmount-demo/host.txt
+
+meenakshi@ubuntu:~$ docker run --rm -v /home/meenakshi/bindmount-demo:/hostdata busybox cat /hostdata/host.txt
+host-file-content
+
+meenakshi@ubuntu:~$ docker run --rm -v /home/meenakshi/bindmount-demo:/hostdata busybox sh -c "echo written-by-container > /hostdata/from-container.txt"
+
+meenakshi@ubuntu:~$ cat ~/bindmount-demo/from-container.txt   # written by the container, read on the host
+written-by-container

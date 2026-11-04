@@ -1,0 +1,2 @@
+IMAGE                                         ID             DISK USAGE   CONTENT SIZE   EXTRA
+ghcr.io/meenakshi16rp/devops-lab2-app:2.0.0   79a66362d515        207MB         50.3MB   U    
