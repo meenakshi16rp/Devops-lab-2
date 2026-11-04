@@ -24,7 +24,7 @@ pipeline {
         stage("Smoke test") {
             steps {
                 echo "Verifying the service responds..."
-                sh "curl -sf http://\$(minikube ip):30080/health"
+                sh "NODEIP=\$(kubectl get node minikube -o jsonpath=\"{.InternalIP}\"); curl -sf http://\$NODEIP:30080/health"
             }
         }
     }
