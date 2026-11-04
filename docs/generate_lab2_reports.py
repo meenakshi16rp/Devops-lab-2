@@ -446,7 +446,10 @@ def q8():
     cover_block(s, "Question 8: Record all Dockerfiles, Kubernetes manifests, commands, "
                 "screenshots, and observations for each experiment.", 5)
 
-    h(s, "1. Repository structure")
+    h(s, "1. Commit history (github.com/meenakshi16rp/Devops-lab-2)")
+    shot(s, "08-lab2-github-commits.png")
+
+    h(s, "2. Repository structure")
     code(s, "ensp461-lab2/\n"
             "  app/               sample Flask application + unit tests\n"
             "  Dockerfile         application image (python:3.12-slim)\n"
@@ -457,7 +460,7 @@ def q8():
             "  docs/screenshots/  terminal renders and Jenkins screenshots",
          GITHUB, small=True)
 
-    h(s, "2. Tool versions")
+    h(s, "3. Tool versions")
     code(s, "meenakshi@ubuntu:~$ docker version --format {{.Server.Version}}\n29.9.2\n"
             "meenakshi@ubuntu:~$ docker compose version\nDocker Compose version v5.7.0\n"
             "meenakshi@ubuntu:~$ kubectl version --client\nClient Version: v1.37.2\n"
@@ -465,7 +468,7 @@ def q8():
             "meenakshi@ubuntu:~$ minikube kubectl -- kubectl version ... v1.37.0",
          "recorded before the experiments", small=True)
 
-    h(s, "3. Command record per experiment")
+    h(s, "4. Command record per experiment")
     tbl(s, ["Experiment", "Key commands", "Evidence"],
         [["Q1 Containerize", "docker build / run / history / inspect / logs", "r2-q1-*.png, docs/logs/q1-*.txt"],
          ["Q2 Manage", "docker ps / stop / start / tag / login / push, docker compose up / down", "r2-q2-*.png, docs/logs/q2-*.txt"],
@@ -476,7 +479,7 @@ def q8():
          ["Q7 CD", "git push, Jenkins ensp461-lab2-cd, kubectl apply + smoke test", "07-*.png, r2-q7-*.png, docs/logs/q7-*.txt"]],
         [3.2 * cm, 8.2 * cm, 4.8 * cm])
 
-    h(s, "4. Observations")
+    h(s, "5. Observations")
     bullets(s, [
         "Every command was executed as user <b>meenakshi</b> on Ubuntu 24.04 LTS (WSL2); "
         "outputs were captured headlessly (tee) and are committed under docs/logs/.",
@@ -509,7 +512,17 @@ def q9():
         "<b>CD:</b> the Jenkins job ensp461-lab2-cd applies the manifests and smoke-tests "
         "the service on every git push."])
 
-    h(s, "2. Deployment strategy")
+    h(s, "2. Tools and environment")
+    bullets(s, [
+        "Ubuntu 24.04 LTS (WSL2) as user <b>meenakshi</b>; Docker Engine 29.9.2, "
+        "Docker Compose v5.7.0, kubectl v1.37.2, Minikube v1.39.0 (Kubernetes v1.37.0, "
+        "docker driver).",
+        "Registry: ghcr.io/meenakshi16rp (GitHub PAT authentication, imagePullSecrets for "
+        "the cluster).",
+        "CI/CD: Jenkins 2.580.2 LTS - job ensp461-lab2-cd, Pipeline script from SCM, "
+        "Poll SCM H/5 * * * *."])
+
+    h(s, "3. Deployment strategy")
     bullets(s, [
         "<b>Rolling update (default Deployment strategy):</b> kubectl set image to 2.1.0 "
         "created a new ReplicaSet; new pods became Ready before old pods terminated, so "
@@ -519,7 +532,15 @@ def q9():
         "<b>Scaling:</b> kubectl scale --replicas=4 / --replicas=2 adjusted the number of "
         "pods without any downtime."])
 
-    h(s, "3. Results")
+    h(s, "4. Scaling results")
+    tbl(s, ["Command", "Replicas", "Observed pods"],
+        [["initial deploy", "2", "2/2 Running"],
+         ["kubectl scale --replicas=4", "4", "4 Running (2 added, rollout successful)"],
+         ["kubectl rollout undo", "4 -> 2", "revision 1 image 2.0.0 served again"],
+         ["kubectl scale --replicas=2", "2", "2 Running, extras terminated gracefully"]],
+        [6.2 * cm, 3.2 * cm, 6.8 * cm])
+
+    h(s, "5. Results")
     tbl(s, ["Operation", "Command", "Outcome"],
         [["Image build", "docker build -t ghcr.io/...:2.0.0", "207 MB image, layers cached"],
          ["Registry push", "docker push (:2.0.0, :latest)", "digest sha256:79a66362..."],
@@ -534,11 +555,11 @@ def q9():
          ["Continuous deployment", "git push -> Jenkins CD", "build #4 by SCM change, SUCCESS"]],
         [3.6 * cm, 6.6 * cm, 6.0 * cm])
 
-    h(s, "4. Evidence highlights")
+    h(s, "6. Evidence highlights")
     shot(s, "r2-q5-verify.png")
     shot(s, "07-cd-stage-graph.png")
 
-    h(s, "5. Observations")
+    h(s, "7. Observations")
     bullets(s, [
         "One image, three runtimes: the identical ghcr image ran as a standalone container, "
         "inside Compose and on Kubernetes - containerization decoupled the app from its "
@@ -551,6 +572,17 @@ def q9():
         "re-verified through the same pipeline.",
         "Minikube's docker driver keeps the whole lab inside the authorized Ubuntu (WSL2) "
         "environment; no resources outside the student identity (meenakshi) were created."])
+
+    h(s, "8. Conclusion")
+    p(s, "The sample application is fully containerized (Dockerfile, 207 MB image, "
+             "pushed to ghcr.io/meenakshi16rp), runs as a multi-container stack under "
+             "Docker Compose, and is orchestrated on a Minikube Kubernetes cluster with a "
+             "ConfigMap-injected Deployment, a NodePort Service, rolling updates, rollback "
+             "and scaling. Continuous deployment is automated end to end: a git push to "
+             "meenakshi16rp/Devops-lab-2 triggers the Jenkins job ensp461-lab2-cd, which "
+             "applies the manifests and smoke-tests the service. All evidence (command "
+             "logs, terminal captures, screenshots and this report) is committed under "
+             "docs/ in the repository.")
     d.build(s)
 
 

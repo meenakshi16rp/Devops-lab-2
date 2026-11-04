@@ -1,89 +1,31 @@
 #0 building with "default" instance using docker driver
 
 #1 [internal] load build definition from Dockerfile
-#1 transferring dockerfile: 273B done
-#1 DONE 0.1s
+#1 transferring dockerfile: 460B done
+#1 DONE 0.0s
 
 #2 [internal] load metadata for docker.io/library/python:3.12-slim
-#2 DONE 2.1s
+#2 DONE 2.3s
 
 #3 [internal] load .dockerignore
 #3 transferring context: 2B done
-#3 DONE 0.1s
+#3 DONE 0.0s
 
 #4 [internal] load build context
-#4 transferring context: 1.50kB done
-#4 DONE 0.1s
+#4 DONE 0.0s
 
-#5 [1/5] FROM docker.io/library/python:3.12-slim@sha256:b18b261e1b4974b4f321451ad5251ded85abb22c2b8b262da527dda1d031ab30
-#5 resolve docker.io/library/python:3.12-slim@sha256:b18b261e1b4974b4f321451ad5251ded85abb22c2b8b262da527dda1d031ab30 0.1s done
+#5 [1/6] FROM docker.io/library/python:3.12-slim@sha256:b18b261e1b4974b4f321451ad5251ded85abb22c2b8b262da527dda1d031ab30
+#5 resolve docker.io/library/python:3.12-slim@sha256:b18b261e1b4974b4f321451ad5251ded85abb22c2b8b262da527dda1d031ab30 0.0s done
 #5 DONE 0.1s
 
-#6 [2/5] WORKDIR /app
+#4 [internal] load build context
+#4 transferring context: 164B done
+#4 DONE 0.0s
+
+#6 [2/6] WORKDIR /app
 #6 CACHED
 
-#7 [3/5] COPY app/requirements.txt .
-#7 DONE 0.1s
+#7 [3/6] COPY app/requirements.txt .
+#7 CACHED
 
-#8 [4/5] RUN pip install --no-cache-dir -r requirements.txt
-#8 4.046 Collecting flask==3.0.3 (from -r requirements.txt (line 1))
-#8 4.104   Downloading flask-3.0.3-py3-none-any.whl.metadata (3.2 kB)
-#8 4.150 Collecting redis==5.0.8 (from -r requirements.txt (line 2))
-#8 4.163   Downloading redis-5.0.8-py3-none-any.whl.metadata (9.2 kB)
-#8 4.205 Collecting pytest==8.3.4 (from -r requirements.txt (line 3))
-#8 4.220   Downloading pytest-8.3.4-py3-none-any.whl.metadata (7.5 kB)
-#8 4.249 Collecting Werkzeug>=3.0.0 (from flask==3.0.3->-r requirements.txt (line 1))
-#8 4.263   Downloading werkzeug-3.1.9-py3-none-any.whl.metadata (4.1 kB)
-#8 4.285 Collecting Jinja2>=3.1.2 (from flask==3.0.3->-r requirements.txt (line 1))
-#8 4.296   Downloading jinja2-3.1.6-py3-none-any.whl.metadata (2.9 kB)
-#8 4.311 Collecting itsdangerous>=2.1.2 (from flask==3.0.3->-r requirements.txt (line 1))
-#8 4.322   Downloading itsdangerous-2.2.0-py3-none-any.whl.metadata (1.9 kB)
-#8 4.347 Collecting click>=8.1.3 (from flask==3.0.3->-r requirements.txt (line 1))
-#8 4.361   Downloading click-8.5.0-py3-none-any.whl.metadata (2.6 kB)
-#8 4.375 Collecting blinker>=1.6.2 (from flask==3.0.3->-r requirements.txt (line 1))
-#8 4.387   Downloading blinker-1.9.0-py3-none-any.whl.metadata (1.6 kB)
-#8 4.406 Collecting iniconfig (from pytest==8.3.4->-r requirements.txt (line 3))
-#8 4.419   Downloading iniconfig-2.3.1-py3-none-any.whl.metadata (2.8 kB)
-#8 4.443 Collecting packaging (from pytest==8.3.4->-r requirements.txt (line 3))
-#8 4.454   Downloading packaging-26.3-py3-none-any.whl.metadata (3.5 kB)
-#8 4.475 Collecting pluggy<2,>=1.5 (from pytest==8.3.4->-r requirements.txt (line 3))
-#8 4.487   Downloading pluggy-1.7.0-py3-none-any.whl.metadata (5.0 kB)
-#8 4.561 Collecting MarkupSafe>=2.0 (from Jinja2>=3.1.2->flask==3.0.3->-r requirements.txt (line 1))
-#8 4.574   Downloading markupsafe-3.0.4-cp312-cp312-manylinux2014_x86_64.manylinux_2_17_x86_64.manylinux_2_28_x86_64.whl.metadata (2.7 kB)
-#8 4.592 Downloading flask-3.0.3-py3-none-any.whl (101 kB)
-#8 4.612 Downloading redis-5.0.8-py3-none-any.whl (255 kB)
-#8 4.633 Downloading pytest-8.3.4-py3-none-any.whl (343 kB)
-#8 4.650 Downloading blinker-1.9.0-py3-none-any.whl (8.5 kB)
-#8 4.661 Downloading click-8.5.0-py3-none-any.whl (125 kB)
-#8 4.673 Downloading itsdangerous-2.2.0-py3-none-any.whl (16 kB)
-#8 4.681 Downloading jinja2-3.1.6-py3-none-any.whl (134 kB)
-#8 4.693 Downloading pluggy-1.7.0-py3-none-any.whl (27 kB)
-#8 4.709 Downloading werkzeug-3.1.9-py3-none-any.whl (228 kB)
-#8 4.726 Downloading iniconfig-2.3.1-py3-none-any.whl (7.6 kB)
-#8 4.739 Downloading packaging-26.3-py3-none-any.whl (129 kB)
-#8 4.752 Downloading markupsafe-3.0.4-cp312-cp312-manylinux2014_x86_64.manylinux_2_17_x86_64.manylinux_2_28_x86_64.whl (22 kB)
-#8 4.810 Installing collected packages: redis, pluggy, packaging, MarkupSafe, itsdangerous, iniconfig, click, blinker, Werkzeug, pytest, Jinja2, flask
-#8 6.226 Successfully installed Jinja2-3.1.6 MarkupSafe-3.0.4 Werkzeug-3.1.9 blinker-1.9.0 click-8.5.0 flask-3.0.3 iniconfig-2.3.1 itsdangerous-2.2.0 packaging-26.3 pluggy-1.7.0 pytest-8.3.4 redis-5.0.8
-#8 6.226 WARNING: Running pip as the 'root' user can result in broken permissions and conflicting behaviour with the system package manager, possibly rendering your system unusable. It is recommended to use a virtual environment instead: https://pip.pypa.io/warnings/venv. Use the --root-user-action option if you know what you are doing and want to suppress this warning.
-#8 6.354 
-#8 6.354 [notice] A new release of pip is available: 25.0.1 -> 26.3
-#8 6.354 [notice] To update, run: pip install --upgrade pip
-#8 DONE 6.5s
-
-#9 [5/5] COPY app/ .
-#9 DONE 0.2s
-
-#10 exporting to image
-#10 exporting layers
-#10 exporting layers 1.6s done
-#10 exporting manifest sha256:f23d91348df832ad2ae78957363308ad1504a9d84c78197aec767ca23f7dca5d 0.1s done
-#10 exporting config sha256:67c51e41796900a0b0dd8a055b36e7a60b3de0089ed3ed10d341dfa4bc9aa363 0.1s done
-#10 exporting attestation manifest sha256:a63290991950f79ec5cd09876b114898407bf7071019b6201b4e8a2bb6e30556 0.1s done
-#10 exporting manifest list sha256:91093efa4e86601dc8e5a1e89036b6e6757bd9899ad32a4e30730e8edde6b7c1
-#10 exporting manifest list sha256:91093efa4e86601dc8e5a1e89036b6e6757bd9899ad32a4e30730e8edde6b7c1 0.1s done
-#10 naming to ghcr.io/meenakshi16rp/devops-lab2-app:2.0.0 0.0s done
-#10 unpacking to ghcr.io/meenakshi16rp/devops-lab2-app:2.0.0
-#10 unpacking to ghcr.io/meenakshi16rp/devops-lab2-app:2.0.0 0.5s done
-#10 DONE 2.4s
-sha256:c534a98cad56110d4bdec18e496a0a162a5991efae6ea5560f8f3ea44d1c4077
-sha256:79a66362d5157d16e965e7f636577008456d89bf4b8e1931477b8143ac9ebae8
+#8 [4/6] RUN pip install --no-cache-dir -r requirements.txt
